@@ -1,0 +1,69 @@
+<?php
+// Шлях до файлу для зберігання лічильника
+$counterFile = "counter.txt";
+
+// Функція для читання значення лічильника
+function readCounter($filename) {
+    if (!file_exists($filename)) {
+        return 0;
+    }
+    $handle = fopen($filename, "r");
+    $count = (int)fread($handle, 20);
+    fclose($handle);
+    return $count;
+}
+
+// Функція для запису значення лічильника
+function writeCounter($filename, $count) {
+    $handle = fopen($filename, "w");
+    fwrite($handle, $count);
+    fclose($handle);
+}
+
+// Читаємо поточне значення
+$count = readCounter($counterFile);
+
+// Збільшуємо на 1
+$count++;
+
+// Зберігаємо нове значення
+writeCounter($counterFile, $count);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Лічильник відвідувань</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .counter {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .number {
+            font-size: 48px;
+            color: #333;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter">
+        <h1>Лічильник відвідувань</h1>
+        <div class="number"><?php echo $count; ?></div>
+        <p>Кількість переглядів сторінки</p>
+    </div>
+</body>
+</html>
