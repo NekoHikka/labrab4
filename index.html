@@ -1,40 +1,34 @@
 <?php
-// Шлях до файлу для зберігання лічильника
+// Initialize counter file path
 $counterFile = "counter.txt";
 
-// Функція для читання значення лічильника
-function readCounter($filename) {
-    if (!file_exists($filename)) {
+// Function to read counter value
+function getCounter() {
+    global $counterFile;
+    if (!file_exists($counterFile)) {
         return 0;
     }
-    $handle = fopen($filename, "r");
-    $count = (int)fread($handle, 20);
-    fclose($handle);
+    return (int)file_get_contents($counterFile);
+}
+
+// Function to increment and save counter
+function incrementCounter() {
+    global $counterFile;
+    $count = getCounter() + 1;
+    file_put_contents($counterFile, $count);
     return $count;
 }
 
-// Функція для запису значення лічильника
-function writeCounter($filename, $count) {
-    $handle = fopen($filename, "w");
-    fwrite($handle, $count);
-    fclose($handle);
-}
-
-// Читаємо поточне значення
-$count = readCounter($counterFile);
-
-// Збільшуємо на 1
-$count++;
-
-// Зберігаємо нове значення
-writeCounter($counterFile, $count);
+// Get current count
+$currentCount = incrementCounter();
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Лічильник відвідувань</title>
-    <meta charset="utf-8">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,26 +37,30 @@ writeCounter($counterFile, $count);
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f0f2f5;
         }
-        .counter {
-            background: white;
-            padding: 20px;
+        .counter-container {
+            background-color: white;
+            padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .number {
-            font-size: 48px;
-            color: #333;
-            margin: 10px 0;
+        .count {
+            font-size: 3rem;
+            color: #1a73e8;
+            margin: 1rem 0;
+        }
+        h1 {
+            color: #202124;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="counter">
+    <div class="counter-container">
         <h1>Лічильник відвідувань</h1>
-        <div class="number"><?php echo $count; ?></div>
+        <div class="count"><?php echo $currentCount; ?></div>
         <p>Кількість переглядів сторінки</p>
     </div>
 </body>
